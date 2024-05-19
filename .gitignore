@@ -2,3 +2,4 @@ api/*
 tl_text.txt
 img/*
 application_default_credentials.json
+tl/__pycache__
