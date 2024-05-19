@@ -12,7 +12,7 @@ def createResponse(lines):
         model="gpt-4o",
         messages=[
             {"role": "system", 
-                "content": "You translate Japanese to English."},
+                "content": "You translate Japanese to English. Ignore any grouped amount of English text when making your output."},
             {"role": "user",
                 "content": lines}
         ]

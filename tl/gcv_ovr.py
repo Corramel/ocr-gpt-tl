@@ -5,7 +5,9 @@ import base64 #potentially for later use when building GUI
 from io import BytesIO
 import json
 
+import PIL
 from PIL import Image as image_reader
+
 
 from google.cloud import vision
 
@@ -29,14 +31,26 @@ target_credentials = impersonated_credentials.Credentials(
     lifetime=60
 )
 
-def detect_txt(path, language="ja"): #language added just in case of future use...
+def detect_txt(path=None, language="ja", saved=True, screenshot=None): #language added just in case of future use...
     client = vision.ImageAnnotatorClient(credentials=target_credentials) 
-    with image_reader.open(path) as f:
-        file = f
+    if saved is True:
+        with image_reader.open(path) as f:
+            file = f
+            file_arr = BytesIO()
+            file.save(file_arr, format='png')
+            file_arr = file_arr.getvalue()
+
+    else:
+        if type(screenshot) is PIL.Image.Image:
+            print("Hello!")
+        else:
+            print(f"Seems like screenshot is not image_reader, what is it? {type(screenshot)}")
+        file = screenshot
         file_arr = BytesIO()
         file.save(file_arr, format='png')
         file_arr = file_arr.getvalue()
 
+    print(f"Image file type: {type(file_arr)}")
     image = vision.Image(content=file_arr)
 
 
@@ -56,4 +70,4 @@ def detect_txt(path, language="ja"): #language added just in case of future use.
     return output
 
 #Used for testing
-#detect_txt(path="C:/Users/Corr/Documents/ShareX/Screenshots/2024-05/firefox_Q3h5qQnriu.png")
+#detect_txt(path="C:/Users/Corr/Documents/ShareX/Screenshots/2024-05/chrome_ycYLSrVSpm.png")
